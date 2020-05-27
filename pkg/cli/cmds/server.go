@@ -2,6 +2,7 @@ package cmds
 
 import (
 	"context"
+	"time"
 
 	"github.com/rancher/k3s/pkg/version"
 	"github.com/urfave/cli"
@@ -46,6 +47,9 @@ type Server struct {
 	DatastoreCAFile          string
 	DatastoreCertFile        string
 	DatastoreKeyFile         string
+	DatastoreMaxIdleConnections    int
+	DatastoreMaxOpenConnections    int
+	DatastoreConnectionMaxLifetime time.Duration
 	AdvertiseIP              string
 	AdvertisePort            int
 	DisableScheduler         bool
@@ -232,6 +236,27 @@ func NewServerCommand(action func(*cli.Context) error) cli.Command {
 				Name:        "etcd-snapshot-dir",
 				Usage:       "(db) Directory to save db snapshots. (Default location: ${data-dir}/db/snapshots)",
 				Destination: &ServerConfig.EtcdSnapshotDir,
+			},
+			cli.IntFlag{
+				Name:        "datastore-max-idle-connections",
+				Usage:       "(db) Maximum number of idle connections used by datastore. If num <= 0, then no connections are retained",
+				Destination: &ServerConfig.DatastoreMaxIdleConnections,
+				Value:       2,
+				EnvVar:      "K3S_DATASTORE_MAX_IDLE_CONNECTIONS",
+			},
+			cli.IntFlag{
+				Name:        "datastore-max-open-connections",
+				Usage:       "(db) Maximum number of idle connections used by datastore. If num <= 0, then there is no limit",
+				Destination: &ServerConfig.DatastoreMaxOpenConnections,
+				Value:       0,
+				EnvVar:      "K3S_DATASTORE_MAX_OPEN_CONNECTIONS",
+			},
+			cli.DurationFlag{
+				Name:        "datastore-connection-max-lifetime",
+				Usage:       "(db) Maximum duration a connection is held alive. Defined as a parsable string, e.g., 1s, 2500ms, and 1h30m are all accepted values",
+				Destination: &ServerConfig.DatastoreConnectionMaxLifetime,
+				Value:       0,
+				EnvVar:      "K3S_DATASTORE_CONNECTION_MAX_LIFETIME",
 			},
 			cli.StringFlag{
 				Name:        "default-local-storage-path",

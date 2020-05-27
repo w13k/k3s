@@ -99,6 +99,9 @@ func run(app *cli.Context, cfg *cmds.Server) error {
 	serverConfig.ControlConfig.ExtraSchedulerAPIArgs = cfg.ExtraSchedulerArgs
 	serverConfig.ControlConfig.ClusterDomain = cfg.ClusterDomain
 	serverConfig.ControlConfig.Datastore.Endpoint = cfg.DatastoreEndpoint
+	serverConfig.ControlConfig.Datastore.ConnectionPoolConfig.MaxIdle = cfg.DatastoreMaxIdleConnections
+	serverConfig.ControlConfig.Datastore.ConnectionPoolConfig.MaxOpen = cfg.DatastoreMaxOpenConnections
+	serverConfig.ControlConfig.Datastore.ConnectionPoolConfig.MaxLifetime = cfg.DatastoreConnectionMaxLifetime
 	serverConfig.ControlConfig.Datastore.CAFile = cfg.DatastoreCAFile
 	serverConfig.ControlConfig.Datastore.CertFile = cfg.DatastoreCertFile
 	serverConfig.ControlConfig.Datastore.KeyFile = cfg.DatastoreKeyFile
