@@ -135,6 +135,7 @@ func (d *Generic) Migrate(ctx context.Context) {
 }
 
 func configureConnectionPooling(connPoolConfig ConnectionPoolConfig, db *sql.DB) {
+	logrus.Infof("Configuring DB connection pooling: maxIdleConns=%d, maxOpenConns=%d, connMaxLifetime=%s", connPoolConfig.MaxIdle, connPoolConfig.MaxOpen, connPoolConfig.MaxLifetime)
 	db.SetMaxIdleConns(connPoolConfig.MaxIdle)
 	db.SetMaxOpenConns(connPoolConfig.MaxOpen)
 	db.SetConnMaxLifetime(connPoolConfig.MaxLifetime)
